@@ -1,16 +1,53 @@
 import { useState } from "react";
-import{ Link} from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./LoginPage.css";
 
 function LoginPage() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    console.log("User ID:", userId);
-    console.log("Password:", password);
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/login",
+        {
+          user_id: userId,
+          password: password
+        }
+      );
+
+      console.log("Login response:", response.data);
+
+      // Store JWT token
+      localStorage.setItem(
+        "access_token",
+        response.data.access_token
+      );
+
+      alert(response.data.message);
+
+      // Clear input fields
+      setUserId("");
+      setPassword("");
+
+      // Later we will change this to your main/chat page
+      // navigate("/chat");
+
+    } catch (error) {
+
+      console.log("Login error:", error);
+
+      if (error.response) {
+        alert(error.response.data.detail);
+      } else {
+        alert("Cannot connect to server");
+      }
+    }
   };
 
   return (
@@ -54,15 +91,13 @@ function LoginPage() {
           </button>
 
         </form>
-        <Link className="link" to='/register'> 
+
+        <Link className="link" to="/register">
           <p className="signup">
-          Don't have an account? <span>Sign up</span>
-        </p>
-
+            Don't have an account? <span>Sign up</span>
+          </p>
         </Link>
-            
 
-       
       </div>
     </div>
   );

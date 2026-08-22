@@ -1,17 +1,39 @@
 import { useState } from "react";
 import "./registerpage.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = (e) => {
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
     e.preventDefault();
 
-    console.log("Register User ID:", userId);
-    console.log("Register Password:", password);
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/register",
+        {
+          user_id: userId,
+          password: password
+        }
+      );
 
-    alert("register button clicked!");
+      alert(response.data.message);
+
+      // Go to login page after successful registration
+      navigate("/");
+
+    } catch (error) {
+
+      if (error.response) {
+        alert(error.response.data.detail);
+      } else {
+        alert("Cannot connect to server");
+      }
+    }
   };
 
   return (
@@ -29,6 +51,7 @@ function RegisterPage() {
         <form onSubmit={handleRegister}>
 
           <label>New User ID</label>
+
           <input
             type="text"
             placeholder="user ID should be unique"
@@ -38,6 +61,7 @@ function RegisterPage() {
           />
 
           <label>New Password</label>
+
           <input
             type="password"
             placeholder="Enter your password"
@@ -51,7 +75,6 @@ function RegisterPage() {
           </button>
 
         </form>
-
 
       </div>
     </div>
