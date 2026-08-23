@@ -1,44 +1,28 @@
-import{ Link} from "react-router-dom"
-const Header =({pn})=>{
-    
+import "./header.css";
+const Header = ({ userName }) => {
     return (
-        <div className='header'>
-          <Link className="link" to='/' >
-          <span>
-              {pn}
-          </span>
-          </Link>
-          
-         
-         
-         <div>
-          <ul className='menu'>
+        <header className="header">
 
-            <li>Home</li>
-            <li>About</li>
-{/* 
-            <Link className="link" to='/demo'> 
-             <li>Demo</li>
-            </Link>
-            
-            <Link className="link" to='/state'> 
-             <li>State Demo</li>
-            </Link>
-            <Link className="link" to='/students'>
-            <li> Students page</li>
+            <div className="header-left">
+                <div className="app-name">
+                    <span className="logo-x">X</span>chat
+                </div>
+            </div>
 
-            </Link>
-            <Link className="link" to='/useEffectdemo'>
-            <li> Use Effect</li> 
-             </Link>
-             */}
+            <div className="header-right">
 
-           
+                <button className="search-btn">
+                    🔍 Search
+                </button>
 
+                <div className="profile-name">
+                    👤 {userName}
+                </div>
 
-          </ul>
-         </div>
-      </div>
-    )
-}
+            </div>
+
+        </header>
+    );
+};
+
 export default Header;

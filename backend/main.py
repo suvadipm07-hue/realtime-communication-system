@@ -1,14 +1,25 @@
-from fastapi import FastAPI, HTTPException
+# uvicorn main:app --reload
+
+from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo.errors import DuplicateKeyError
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Depends
 
 from database import users_collection
 from models import RegisterUser, LoginUser
-from auth import hash_password, verify_password, create_token
-
+from auth import (
+    hash_password,
+    verify_password,
+    create_token,
+    decode_token
+)
 
 
 app = FastAPI()
+
+
+# ---------------- CORS ----------------
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,9 +30,13 @@ app.add_middleware(
 )
 
 
+# ---------------- HOME ----------------
+
 @app.get("/")
 def home():
-    return {"message": "FastAPI server is running"}
+    return {
+        "message": "FastAPI server is running"
+    }
 
 
 # ---------------- REGISTER ----------------
@@ -32,6 +47,7 @@ def register(user: RegisterUser):
     print("REGISTER API CALLED")
     print("User ID:", user.user_id)
 
+    # Check if user already exists
     existing_user = users_collection.find_one({
         "user_id": user.user_id
     })
@@ -44,16 +60,20 @@ def register(user: RegisterUser):
             detail="User ID already exists"
         )
 
+    # Hash password
     hashed_password = hash_password(user.password)
 
     print("Password hashed")
 
+    # Create user document
     new_user = {
+        "name": user.name,
         "user_id": user.user_id,
         "password": hashed_password
     }
 
     try:
+
         result = users_collection.insert_one(new_user)
 
         print("USER INSERTED:", result.inserted_id)
@@ -68,6 +88,7 @@ def register(user: RegisterUser):
     return {
         "message": "Registration successful"
     }
+
 
 # ---------------- LOGIN ----------------
 
@@ -95,11 +116,87 @@ def login(user: LoginUser):
             detail="Invalid user ID or password"
         )
 
-    # Create JWT token
-    token = create_token(existing_user["user_id"])
+    # Create JWT
+    token = create_token(
+        existing_user["user_id"]
+    )
+
+    print("LOGIN SUCCESS")
+    print("User ID:", existing_user["user_id"])
 
     return {
         "message": "Login successful",
         "access_token": token,
         "token_type": "bearer"
+    }
+
+
+# ---------------- ALL USERS / CHAT LIST ----------------
+
+@app.get("/user")
+def getUserDetails():
+
+    try:
+
+        users = users_collection.find()
+
+        result = []
+
+        for user in users:
+
+            user["_id"] = str(user["_id"])
+
+            result.append(user)
+
+        return result
+
+    except Exception as e:
+
+        print("Error:", e)
+
+        raise HTTPException(
+            status_code=500,
+            detail="Error fetching users"
+        )
+
+
+# ---------------- CURRENT LOGGED-IN USER ----------------
+@app.get("/user/me")
+def get_logged_in_user(authorization: str = Header(None)):
+
+    if not authorization:
+        raise HTTPException(
+            status_code=401,
+            detail="Authorization header missing"
+        )
+
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid authorization format"
+        )
+
+    token = authorization.split(" ", 1)[1]
+
+    user_id = decode_token(token)
+
+    if not user_id:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid or expired token"
+        )
+
+    user = users_collection.find_one({
+        "user_id": user_id
+    })
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    return {
+        "name": user["name"],
+        "user_id": user["user_id"]
     }

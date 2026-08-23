@@ -25,3 +25,15 @@ def create_token(user_id: str):
     }
 
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+
+
+def decode_token(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload.get("user_id")
+    except jwt.ExpiredSignatureError:
+        print("TOKEN EXPIRED")
+        return None
+    except jwt.InvalidTokenError as e:
+        print("TOKEN INVALID:", e)
+        return None

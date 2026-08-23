@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./LoginPage.css";
 
-function LoginPage() {
+const LoginPage=()=> {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,8 +35,7 @@ function LoginPage() {
       setUserId("");
       setPassword("");
 
-      // Later we will change this to your main/chat page
-      // navigate("/chat");
+      navigate("/chat");
 
     } catch (error) {
 
@@ -86,9 +85,11 @@ function LoginPage() {
             required
           />
 
-          <button type="submit">
+          
+          <button type="submit" className="link">
             Login
           </button>
+          
 
         </form>
 

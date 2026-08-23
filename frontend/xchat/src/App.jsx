@@ -1,7 +1,9 @@
 import "./App.css";
 import { BrowserRouter,Routes,Route } from 'react-router-dom';
-import LoginPage from "./pages/LoginPage";
+
 import RegisterPage from "./pages/registerpage";
+import ChatPage from "./pages/chatpage";
+import LoginPage from "./pages/loginpage";
 
 const App  = ()=>{
  
@@ -13,6 +15,7 @@ const App  = ()=>{
     <Routes>
       <Route path='/' element={<LoginPage/>}/>
       <Route path='/register' element={<RegisterPage/>}/>
+      <Route path='/chat' element={<ChatPage/>}/>
 
     </Routes>
 

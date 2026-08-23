@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 function RegisterPage() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
+  const [name,setName]=useState("")
 
   const navigate = useNavigate();
 
@@ -17,7 +18,8 @@ function RegisterPage() {
         "http://127.0.0.1:8000/register",
         {
           user_id: userId,
-          password: password
+          password: password,
+          name: name
         }
       );
 
@@ -49,6 +51,15 @@ function RegisterPage() {
         </p>
 
         <form onSubmit={handleRegister}>
+          <label>Enter your name</label>
+
+          <input
+            type="text"
+            placeholder="Your Name..."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
 
           <label>New User ID</label>
 
