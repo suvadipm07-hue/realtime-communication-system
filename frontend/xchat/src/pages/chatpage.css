@@ -58,3 +58,25 @@
 
     color: #64748b;
 }
+.link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.link * {
+    text-decoration: none;
+}
+@media (max-width: 768px) {
+
+    .chat-list {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .chat-item {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+}

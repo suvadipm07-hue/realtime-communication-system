@@ -11,6 +11,8 @@ client = MongoClient(MONGO_URL)
 db = client["xchat"]
 
 users_collection = db["users"]
+chats_collection = db["chats"]
+messages_collection = db["mesaages"]
 
 users_collection.create_index(
     "user_id",

@@ -1,0 +1,324 @@
+/* =========================
+   FULL INBOX PAGE
+========================= */
+
+.inbox-page {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #f3f6fb;
+
+    overflow: hidden;
+}
+
+
+/* =========================
+   INBOX HEADER
+========================= */
+
+
+.inbox-header {
+    height: 70px;
+
+    background: #0b2a5b;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 25px;
+
+    box-sizing: border-box;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+    flex-shrink: 0;
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back-button {
+    border: none;
+    background: transparent;
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    padding: 8px 0;
+}
+
+
+.back-button:hover {
+    opacity: 0.8;
+}
+
+
+/* =========================
+   CONTACT NAME
+========================= */
+
+.contact-info {
+    display: flex;
+    align-items: center;
+}
+
+
+.contact-info h2 {
+    margin: 0;
+
+    color: white;
+
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Contact information */
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+
+.contact-info h2 {
+    margin: 0;
+
+    color: white;
+
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+.contact-info p {
+    margin: 2px 0 0;
+
+    color: #cbd5e1;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   MESSAGE AREA
+========================= */
+
+.message-area {
+    flex: 1;
+
+    padding: 20px;
+
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    box-sizing: border-box;
+}
+
+
+/* Empty chat */
+
+.empty-chat {
+    margin: auto;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   MESSAGES
+========================= */
+
+.message {
+    max-width: 65%;
+
+    padding: 10px 14px;
+
+    border-radius: 12px;
+
+    font-size: 14px;
+
+    word-wrap: break-word;
+}
+
+
+/* My messages */
+
+.my-message {
+    align-self: flex-end;
+
+    background: #1d4ed8;
+
+    color: white;
+
+    border-bottom-right-radius: 3px;
+}
+
+
+/* Other user's messages */
+
+.their-message {
+    align-self: flex-start;
+
+    background: white;
+
+    color: #111827;
+
+    border-bottom-left-radius: 3px;
+
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================
+   MESSAGE INPUT
+========================= */
+
+.message-input-area {
+    min-height: 70px;
+
+    background: white;
+
+    border-top: 1px solid #dbe2ea;
+
+    padding: 12px 16px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    box-sizing: border-box;
+
+    flex-shrink: 0;
+}
+
+
+/* Input */
+
+.message-input-area input {
+    flex: 1;
+
+    height: 44px;
+
+    padding: 0 14px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 22px;
+
+    outline: none;
+
+    font-size: 14px;
+
+    box-sizing: border-box;
+}
+
+
+.message-input-area input:focus {
+    border-color: #1d4ed8;
+}
+
+
+/* Send button */
+
+.message-input-area button {
+    height: 44px;
+
+    padding: 0 20px;
+
+    border: none;
+
+    border-radius: 22px;
+
+    background: #1d4ed8;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.message-input-area button:hover {
+    background: #2563eb;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+    .inbox-header {
+        height: 65px;
+
+        padding: 0 12px;
+    }
+
+
+    .back-button {
+        width: 38px;
+        height: 38px;
+
+        font-size: 22px;
+
+        margin-right: 10px;
+    }
+
+
+    .contact-info h2 {
+        font-size: 16px;
+    }
+
+
+    .message-area {
+        padding: 12px;
+    }
+
+
+    .message {
+        max-width: 80%;
+
+        font-size: 14px;
+    }
+
+
+    .message-input-area {
+        padding: 10px;
+    }
+
+
+    .message-input-area input {
+        height: 42px;
+    }
+
+
+    .message-input-area button {
+        height: 42px;
+
+        padding: 0 16px;
+    }
+
+}

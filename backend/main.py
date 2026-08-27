@@ -5,9 +5,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pymongo.errors import DuplicateKeyError
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Depends
-
+from chat import chat_router
+from chat import search_router
+from messages import message_router
 from database import users_collection
 from models import RegisterUser, LoginUser
+
 from auth import (
     hash_password,
     verify_password,
@@ -17,6 +20,9 @@ from auth import (
 
 
 app = FastAPI()
+app.include_router(chat_router)
+app.include_router(search_router)
+app.include_router(message_router)
 
 
 # ---------------- CORS ----------------

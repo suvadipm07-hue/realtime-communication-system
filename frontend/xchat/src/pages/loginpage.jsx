@@ -64,7 +64,6 @@ const LoginPage=()=> {
         </p>
 
         <form onSubmit={handleLogin}>
-
           <label>User ID</label>
 
           <input
