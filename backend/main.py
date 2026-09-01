@@ -10,6 +10,8 @@ from chat import search_router
 from messages import message_router
 from database import users_collection
 from models import RegisterUser, LoginUser
+from websocket  import websocket_router
+from chat_actions import chat_actions_router
 
 from auth import (
     hash_password,
@@ -23,13 +25,14 @@ app = FastAPI()
 app.include_router(chat_router)
 app.include_router(search_router)
 app.include_router(message_router)
-
+app.include_router(websocket_router)
+app.include_router(chat_actions_router)
 
 # ---------------- CORS ----------------
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[""],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

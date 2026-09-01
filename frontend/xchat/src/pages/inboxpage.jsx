@@ -1,76 +1,170 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {
+useState,
+useEffect,
+useRef
+} from "react";
+
+import {
+useParams,
+useNavigate
+} from "react-router-dom";
+
 import axios from "axios";
 
 import "./InboxPage.css";
 
-
 const InboxPage = () => {
 
-    // Get both IDs from URL
-    // Example:
-    // /inbox/6a8fd7eb19449fd346a57808/rahul123
+// ==========================================
+// GET IDs FROM URL
+// ==========================================
 
-    const { chatId, userId } = useParams();
-    const navigate = useNavigate();
-
-
-    // ==========================================
-    // STATES
-    // ==========================================
-
-    const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState([]);
-    const [contactName, setContactName] = useState("");
-    const [contactUserId, setContactUserId] = useState("");
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+const {
+    chatId,
+    userId
+} = useParams();
 
 
-    // ==========================================
-    // GET CURRENT USER ID FROM JWT
-    // ==========================================
-    const getCurrentUserId = () => {
-        const token = localStorage.getItem("access_token");
-        if (!token) return null;
+const navigate =
+    useNavigate();
 
-        try {
-            const base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
-            const payload = JSON.parse(atob(base64));
+
+// ==========================================
+// STATES
+// ==========================================
+
+const [message, setMessage] =
+    useState("");
+
+
+const [messages, setMessages] =
+    useState([]);
+
+
+const [contactName, setContactName] =
+    useState("");
+
+
+const [contactUserId, setContactUserId] =
+    useState("");
+
+
+const [loading, setLoading] =
+    useState(true);
+
+
+const [error, setError] =
+    useState("");
+
+
+// WebSocket reference
+
+const socketRef =
+    useRef(null);
+
+
+
+// ==========================================
+// GET CURRENT USER ID FROM JWT
+// ==========================================
+
+const getCurrentUserId = () => {
+
+
+    const token =
+        localStorage.getItem(
+            "access_token"
+        );
+
+
+    if (!token) {
+
+        return null;
+
+    }
+
+
+    try {
+
+
+        const base64 =
+            token
+                .split(".")[1]
+                .replace(
+                    /-/g,
+                    "+"
+                )
+                .replace(
+                    /_/g,
+                    "/"
+                );
+
+
+        const payload =
+            JSON.parse(
+                atob(base64)
+            );
+
+
         return payload.user_id;
-        } catch (error) {
-            console.log("Token error:", error);
-            return null;
-        }
-    };
 
 
-    const currentUserId = getCurrentUserId();
+    } catch (error) {
 
 
-    // ==========================================
-    // GET CONTACT + MESSAGES
-    // ==========================================
+        console.log(
+            "Token error:",
+            error
+        );
 
-    const fetchMessages = async () => {
+
+        return null;
+
+    }
+
+};
+
+
+
+const currentUserId =
+    getCurrentUserId();
+
+
+
+// ==========================================
+// GET CONTACT + OLD MESSAGES
+// ==========================================
+
+const fetchMessages =
+    async () => {
+
 
         try {
+
 
             setLoading(true);
 
             setError("");
 
+
             const token =
-                localStorage.getItem("access_token");
+                localStorage.getItem(
+                    "access_token"
+                );
+
 
 
             // ======================================
             // GET CONTACT INFORMATION
             // ======================================
 
-            const userResponse = await axios.get(
-                `http://127.0.0.1:8000/users/search/${userId}`
-            );
+            const userResponse =
+                await axios.get(
+
+                    `http://127.0.0.1:8000/users/search/${userId}`
+
+                );
+
 
             console.log(
                 "Contact:",
@@ -79,27 +173,43 @@ const InboxPage = () => {
 
 
             setContactName(
-                userResponse.data.name || ""
+
+                userResponse.data.name ||
+                ""
+
             );
 
 
             setContactUserId(
-                userResponse.data.user_id || userId
+
+                userResponse.data.user_id ||
+                userId
+
             );
 
 
+
             // ======================================
-            // GET CHAT MESSAGES
+            // GET OLD CHAT MESSAGES
             // ======================================
 
-            const messageResponse = await axios.get(
-                `http://127.0.0.1:8000/messages/${chatId}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
+            const messageResponse =
+                await axios.get(
+
+                    `http://127.0.0.1:8000/messages/${chatId}`,
+
+                    {
+
+                        headers: {
+
+                            Authorization:
+                                `Bearer ${token}`
+
+                        }
+
                     }
-                }
-            );
+
+                );
 
 
             console.log(
@@ -109,144 +219,328 @@ const InboxPage = () => {
 
 
             setMessages(
-                messageResponse.data || []
+
+                messageResponse.data ||
+                []
+
             );
 
 
         } catch (error) {
 
+
             console.log(
+
                 "Get inbox error:",
+
                 error.response?.data ||
                 error.message
+
             );
 
 
             setError(
+
                 error.response?.data?.detail ||
+
                 "Could not load chat"
+
             );
 
 
         } finally {
 
+
             setLoading(false);
 
         }
+
     };
 
 
-    // ==========================================
-    // LOAD DATA WHEN PAGE OPENS
-    // ==========================================
 
-    useEffect(() => {
+// ==========================================
+// LOAD OLD MESSAGES WHEN PAGE OPENS
+// ==========================================
+
+useEffect(() => {
+
 
     fetchMessages();
 
-    const interval = setInterval(() => {
-        fetchMessages();
-    }, 2000);
 
-    return () => {
-        clearInterval(interval);
+}, [
+
+    chatId,
+    userId
+
+]);
+
+
+
+// ==========================================
+// WEBSOCKET CONNECTION
+// ==========================================
+
+useEffect(() => {
+
+
+    if (!chatId) {
+
+        return;
+
+    }
+
+
+
+    // Create WebSocket connection
+
+    const socket =
+        new WebSocket(
+
+            `ws://127.0.0.1:8000/ws/messages/${chatId}`
+
+        );
+
+
+    // Store socket reference
+
+    socketRef.current =
+        socket;
+
+
+
+    // ======================================
+    // CONNECTION OPENED
+    // ======================================
+
+    socket.onopen = () => {
+
+
+        console.log(
+            "WebSocket connected"
+        );
+
     };
 
-}, [chatId]); 
 
 
-    // ==========================================
-    // SEND MESSAGE
-    // ==========================================
+    // ======================================
+    // RECEIVE MESSAGE INSTANTLY
+    // ======================================
 
-    const handleSendMessage = async (e) => {
+    socket.onmessage =
+        (event) => {
+
+
+            const newMessage =
+                JSON.parse(
+                    event.data
+                );
+
+
+            console.log(
+
+                "New message received:",
+
+                newMessage
+
+            );
+
+
+            setMessages(
+
+                (
+                    previousMessages
+                ) => {
+
+
+                    // ==================================
+                    // PREVENT DUPLICATE MESSAGE
+                    // ==================================
+
+                    const messageExists =
+                        previousMessages.some(
+
+                            (msg) =>
+
+                                msg.message_id ===
+                                newMessage.message_id
+
+                        );
+
+
+                    if (messageExists) {
+
+                        return previousMessages;
+
+                    }
+
+
+
+                    // ==================================
+                    // ADD NEW MESSAGE
+                    // ==================================
+
+                    return [
+
+                        ...previousMessages,
+
+                        newMessage
+
+                    ];
+
+                }
+
+            );
+
+        };
+
+
+
+    // ======================================
+    // CONNECTION CLOSED
+    // ======================================
+
+    socket.onclose =
+        () => {
+
+
+            console.log(
+                "WebSocket disconnected"
+            );
+
+        };
+
+
+
+    // ======================================
+    // CONNECTION ERROR
+    // ======================================
+
+    socket.onerror =
+        (error) => {
+
+
+            console.log(
+
+                "WebSocket error:",
+
+                error
+
+            );
+
+        };
+
+
+
+    // ======================================
+    // CLEANUP WHEN USER LEAVES CHAT
+    // ======================================
+
+    return () => {
+
+
+        socket.close();
+
+
+        socketRef.current =
+            null;
+
+    };
+
+
+}, [
+
+    chatId
+
+]);
+
+
+
+// ==========================================
+// SEND MESSAGE
+// ==========================================
+
+const handleSendMessage =
+    async (e) => {
+
 
         e.preventDefault();
 
 
-        // Don't send empty message
+
+        // Don't send empty messages
 
         if (!message.trim()) {
+
             return;
+
         }
+
 
 
         try {
 
+
             const token =
-                localStorage.getItem("access_token");
+                localStorage.getItem(
+                    "access_token"
+                );
 
 
-            const response = await axios.post(
+
+            // ======================================
+            // SEND MESSAGE TO BACKEND
+            // ======================================
+
+            await axios.post(
 
                 `http://127.0.0.1:8000/messages/${chatId}`,
 
                 {
-                    message: message.trim()
+
+                    message:
+                        message.trim()
+
                 },
 
                 {
+
                     headers: {
+
                         Authorization:
                             `Bearer ${token}`
+
                     }
+
                 }
 
             );
 
 
-            console.log(
-                "Message sent:",
-                response.data
-            );
-
 
             // ======================================
-            // ADD NEW MESSAGE TO SCREEN
+            // CLEAR INPUT
             // ======================================
 
-            const newMessage = {
-
-                message_id:
-                    response.data.message_id,
-
-                sender_id:
-                    response.data.sender_id,
-
-                receiver_id:
-                    response.data.receiver_id,
-
-                message:
-                    response.data.text,
-
-                created_at:
-                    new Date().toISOString()
-
-            };
-
-
-            setMessages(
-                (previousMessages) => [
-
-                    ...previousMessages,
-
-                    newMessage
-
-                ]
-            );
-
-
-            // Clear input
+            // Message will automatically appear
+            // through WebSocket broadcast
 
             setMessage("");
 
 
+
         } catch (error) {
 
+
             console.log(
+
                 "Send message error:",
+
                 error.response?.data ||
                 error.message
+
             );
 
         }
@@ -254,151 +548,235 @@ const InboxPage = () => {
     };
 
 
-    // ==========================================
-    // UI
-    // ==========================================
 
-    return (
+// ==========================================
+// UI
+// ==========================================
 
-        <div className="inbox-page">
+return (
 
-
-            {/* ==================================
-                HEADER
-            ================================== */}
-
-            <div className="inbox-header">
+    <div className="inbox-page">
 
 
-                {/* LEFT - BACK BUTTON */}
+        {/* ==================================
+            HEADER
+        ================================== */}
 
-                <button
-                    className="back-button"
-                    onClick={() => navigate("/chat")}
-                >
-                    ← Back
-                </button>
+        <div className="inbox-header">
 
 
-                {/* RIGHT - CONTACT NAME */}
+            {/* BACK BUTTON */}
 
-                <div className="contact-info">
+            <button
 
-                    <h2>
-                        {
-                            contactName ||
-                            contactUserId ||
-                            userId
-                        }
-                    </h2>
+                className="back-button"
 
-                </div>
+                onClick={() =>
+                    navigate("/chat")
+                }
+
+            >
+
+                ← Back
+
+            </button>
+
+
+
+            {/* CONTACT NAME */}
+
+            <div className="contact-info">
+
+
+                <h2>
+
+                    {
+
+                        contactName ||
+
+                        contactUserId ||
+
+                        userId
+
+                    }
+
+                </h2>
+
 
             </div>
 
 
+        </div>
+
+
+
+        {/* ==================================
+            MESSAGE AREA
+        ================================== */}
+
+        <div className="message-area">
+
+
+            {/* LOADING */}
+
+            {
+
+                loading && (
+
+                    <div className="empty-chat">
+
+                        Loading messages...
+
+                    </div>
+
+                )
+
+            }
+
+
+
+            {/* ERROR */}
+
+            {
+
+                !loading &&
+
+                error && (
+
+                    <div className="empty-chat">
+
+                        {error}
+
+                    </div>
+
+                )
+
+            }
+
+
+
+            {/* NO MESSAGES */}
+
+            {
+
+                !loading &&
+
+                !error &&
+
+                messages.length === 0 && (
+
+                    <div className="empty-chat">
+
+                        No messages yet
+
+                    </div>
+
+                )
+
+            }
+
+
 
             {/* ==================================
-                MESSAGE AREA
+                MESSAGE LIST
             ================================== */}
 
-            <div className="message-area">
+            {
 
+                !loading &&
 
-                {/* LOADING */}
+                !error &&
 
-                {loading && (
+                messages.map(
 
-                    <div className="empty-chat">
-                        Loading messages...
-                    </div>
+                    (msg) => {
 
-                )}
-
-
-
-                {/* ERROR */}
-
-                {!loading && error && (
-
-                    <div className="empty-chat">
-                        {error}
-                    </div>
-
-                )}
-
-
-
-                {/* NO MESSAGES */}
-
-                {!loading &&
-                    !error &&
-                    messages.length === 0 && (
-
-                        <div className="empty-chat">
-                            No messages yet
-                        </div>
-
-                    )}
-
-
-
-                {/* ==================================
-                    MESSAGES
-                ================================== */}
-
-                {!loading &&
-                    !error &&
-                    messages.map((msg) => {
 
                         const isMyMessage =
+
                             msg.sender_id ===
                             currentUserId;
+
 
 
                         return (
 
                             <div
-                                key={msg.message_id}
-                                className={`message-container ${
-                                    isMyMessage
-                                        ? "my-message-container"
-                                        : "their-message-container"
-                                }`}
+
+                                key={
+                                    msg.message_id
+                                }
+
+                                className={
+
+                                    `message-container ${
+
+                                        isMyMessage
+
+                                            ? "my-message-container"
+
+                                            : "their-message-container"
+
+                                    }`
+
+                                }
+
                             >
 
 
-                                {/* ==========================
-                                    NAME ABOVE MESSAGE
-                                ========================== */}
+                                {/* SENDER NAME */}
 
                                 <div
-                                    className={`message-sender-name ${
-                                        isMyMessage
-                                            ? "my-sender-name"
-                                            : "their-sender-name"
-                                    }`}
+
+                                    className={
+
+                                        `message-sender-name ${
+
+                                            isMyMessage
+
+                                                ? "my-sender-name"
+
+                                                : "their-sender-name"
+
+                                        }`
+
+                                    }
+
                                 >
 
-                                    {isMyMessage
-                                        ? "You"
-                                        : contactName ||
-                                          msg.sender_id}
+                                    {
+
+                                        isMyMessage
+
+                                            ? "You"
+
+                                            : contactName ||
+                                              msg.sender_id
+
+                                    }
 
                                 </div>
 
 
 
-                                {/* ==========================
-                                    MESSAGE
-                                ========================== */}
+                                {/* MESSAGE */}
 
                                 <div
-                                    className={`message ${
-                                        isMyMessage
-                                            ? "my-message"
-                                            : "their-message"
-                                    }`}
+
+                                    className={
+
+                                        `message ${
+
+                                            isMyMessage
+
+                                                ? "my-message"
+
+                                                : "their-message"
+
+                                        }`
+
+                                    }
+
                                 >
 
                                     {msg.message}
@@ -410,44 +788,67 @@ const InboxPage = () => {
 
                         );
 
-                    })}
-
-            </div>
-
-
-
-            {/* ==================================
-                MESSAGE INPUT
-            ================================== */}
-
-            <form
-                className="message-input-area"
-                onSubmit={handleSendMessage}
-            >
-
-
-                <input
-                    type="text"
-                    placeholder="Type a message..."
-                    value={message}
-                    onChange={(e) =>
-                        setMessage(e.target.value)
                     }
-                />
 
+                )
 
-                <button type="submit">
-                    Send
-                </button>
-
-
-            </form>
+            }
 
 
         </div>
 
-    );
-};
 
+
+        {/* ==================================
+            MESSAGE INPUT
+        ================================== */}
+
+        <form
+
+            className="message-input-area"
+
+            onSubmit={
+                handleSendMessage
+            }
+
+        >
+
+
+            <input
+
+                type="text"
+
+                placeholder="Type a message..."
+
+                value={message}
+
+                onChange={
+                    (e) =>
+
+                        setMessage(
+                            e.target.value
+                        )
+                }
+
+            />
+
+
+            <button
+                type="submit"
+            >
+
+                Send
+
+            </button>
+
+
+        </form>
+
+
+    </div>
+
+);
+
+};
 
 export default InboxPage;
