@@ -80,3 +80,64 @@
     }
 
 }
+/* =========================
+   CHAT ITEM LAYOUT
+========================= */
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+/* Keep user information on the left */
+
+.chat-user {
+    min-width: 0;
+    flex: 1;
+}
+
+.chat-user h3,
+.chat-user p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* =========================
+   DELETE CHAT BUTTON
+========================= */
+
+.delete-chat-btn {
+    flex-shrink: 0;
+
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #dc2626;
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+
+    font-size: 17px;
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.delete-chat-btn:hover {
+    color: white;
+    background: #dc2626;
+    border-color: #dc2626;
+}
+
+.no-chats {
+    padding: 20px;
+    text-align: center;
+    color: #64748b;
+}

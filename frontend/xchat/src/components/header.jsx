@@ -1,5 +1,6 @@
 import "./header.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Header = ({ userName }) => {
@@ -8,6 +9,17 @@ const Header = ({ userName }) => {
     const [searchResult, setSearchResult] = useState(null);
     const [searchMessage, setSearchMessage] = useState("");
     const [addChatMessage, setAddChatMessage] = useState("");
+    const navigate = useNavigate();
+
+
+    // =========================
+    // LOGOUT
+    // =========================
+
+    const handleLogout = () => {
+        localStorage.removeItem("access_token");
+        navigate("/login");
+    };
 
 
     // =========================
@@ -120,37 +132,35 @@ const Header = ({ userName }) => {
 
 
     return (
-
         <header className="header">
 
+            {/* HAMBURGER MENU */}
+            <button
+                className="menu-btn"
+                onClick={() => navigate("/description")}
+                title="About ChatApp"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-            {/* LEFT SIDE */}
 
+            {/* CENTER APP NAME */}
             <div className="header-left">
-
                 <div className="app-name">
-
-                    <span className="logo-x">
-                        X
-                    </span>
-
-                    chat
-
+                    <span className="logo-x">You</span> Chat
                 </div>
-
             </div>
 
 
             {/* RIGHT SIDE */}
-
             <div className="header-right">
 
-
+                {/* SEARCH CONTAINER */}
                 <div className="search-container">
 
-
                     {/* SEARCH FORM */}
-
                     <form onSubmit={handleSearch}>
 
                         <input
@@ -169,9 +179,7 @@ const Header = ({ userName }) => {
 
 
                     {/* SEARCH RESULT */}
-
                     {searchResult && (
-
                         <div className="search-result">
 
                             <div className="user-info">
@@ -186,7 +194,6 @@ const Header = ({ userName }) => {
 
                             </div>
 
-
                             <button
                                 type="button"
                                 onClick={handleAddChat}
@@ -195,49 +202,46 @@ const Header = ({ userName }) => {
                             </button>
 
                         </div>
-
                     )}
 
 
                     {/* SEARCH MESSAGE */}
-
                     {searchMessage && (
-
                         <div className="search-message">
                             {searchMessage}
                         </div>
-
                     )}
 
 
                     {/* ADD CHAT MESSAGE */}
-
                     {addChatMessage && (
-
                         <div className="search-message">
                             {addChatMessage}
                         </div>
-
                     )}
 
                 </div>
 
 
                 {/* PROFILE */}
-
                 <div className="profile-name">
-
                     👤 {userName}
-
                 </div>
 
 
-            </div>
+                {/* LOGOUT */}
+                <button
+                    className="logout-btn"
+                    onClick={handleLogout}
+                    title="Logout"
+                >
+                    Logout
+                </button>
 
+            </div>
 
         </header>
     );
 };
-
 
 export default Header;

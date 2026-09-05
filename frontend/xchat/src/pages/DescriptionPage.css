@@ -1,0 +1,497 @@
+/* =========================
+   DESCRIPTION PAGE
+========================= */
+
+.description-page {
+  min-height: 100vh;
+  background: #f8faff;
+  color: #172033;
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.description-header {
+  height: 75px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.description-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 23px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.logo-icon {
+  font-size: 28px;
+}
+
+.back-chat-btn {
+  border: none;
+  background: #eef4ff;
+  color: #2563eb;
+  padding: 11px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.back-chat-btn:hover {
+  background: #2563eb;
+  color: white;
+  transform: translateX(-3px);
+}
+
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.description-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 25px;
+}
+
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.description-hero {
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  padding: 70px 0;
+}
+
+.hero-text {
+  max-width: 570px;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: #eef4ff;
+  color: #2563eb;
+  padding: 9px 16px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 22px;
+}
+
+.hero-text h1 {
+  font-size: 52px;
+  line-height: 1.15;
+  margin: 0 0 22px;
+  font-weight: 750;
+  letter-spacing: -1.5px;
+}
+
+.hero-text h1 span {
+  color: #2563eb;
+}
+
+.hero-text p {
+  font-size: 17px;
+  line-height: 1.8;
+  color: #687386;
+  margin-bottom: 30px;
+}
+
+.hero-chat-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 14px 25px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.hero-chat-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+
+/* =========================
+   HERO ILLUSTRATION
+========================= */
+
+.hero-illustration {
+  width: 430px;
+  height: 380px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.illustration-circle {
+  width: 270px;
+  height: 270px;
+  border-radius: 50%;
+  background: #e8f0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 100px;
+  box-shadow: 0 20px 50px rgba(37, 99, 235, 0.12);
+}
+
+.floating-message {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  padding: 15px 20px;
+  border-radius: 14px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+.floating-message > span {
+  font-size: 25px;
+}
+
+.floating-message strong {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.floating-message small {
+  color: #8a94a6;
+  font-size: 11px;
+}
+
+.message-one {
+  top: 35px;
+  left: 0;
+}
+
+.message-two {
+  bottom: 35px;
+  right: 0;
+}
+
+
+/* =========================
+   SECTION HEADING
+========================= */
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.section-heading > span {
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.section-heading h2 {
+  font-size: 32px;
+  margin: 12px 0;
+  color: #172033;
+}
+
+.section-heading p {
+  color: #7b8495;
+  font-size: 15px;
+}
+
+
+/* =========================
+   FEATURES
+========================= */
+
+.features-section {
+  padding: 80px 0;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.feature-card {
+  background: white;
+  padding: 30px 25px;
+  border-radius: 16px;
+  border: 1px solid #edf0f5;
+  transition: 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
+}
+
+.feature-icon {
+  width: 55px;
+  height: 55px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  margin-bottom: 20px;
+}
+
+.feature-icon.blue {
+  background: #e8f0ff;
+}
+
+.feature-icon.purple {
+  background: #f0eaff;
+}
+
+.feature-icon.green {
+  background: #e6f8ef;
+}
+
+.feature-icon.orange {
+  background: #fff0df;
+}
+
+.feature-card h3 {
+  font-size: 17px;
+  margin-bottom: 12px;
+}
+
+.feature-card p {
+  color: #7b8495;
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+
+/* =========================
+   HOW IT WORKS
+========================= */
+
+.how-section {
+  padding: 80px 0;
+}
+
+.steps-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.step-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid #edf0f5;
+}
+
+.step-number {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 20px;
+}
+
+.step-card h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.step-card p {
+  color: #7b8495;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   CTA
+========================= */
+
+.description-cta {
+  background: #2563eb;
+  border-radius: 20px;
+  padding: 45px 55px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin: 60px 0;
+  color: white;
+}
+
+.description-cta h2 {
+  font-size: 28px;
+  margin: 0 0 12px;
+}
+
+.description-cta p {
+  margin: 0;
+  color: #dbeafe;
+  font-size: 15px;
+}
+
+.cta-button {
+  background: white;
+  color: #2563eb;
+  border: none;
+  padding: 14px 25px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.3s;
+}
+
+.cta-button:hover {
+  background: #eff6ff;
+  transform: translateY(-2px);
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.description-footer {
+  padding: 25px 7%;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #edf0f5;
+  background: white;
+  color: #8a94a6;
+  font-size: 12px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+  .description-hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 50px 0;
+  }
+
+  .hero-text {
+    max-width: 700px;
+  }
+
+  .hero-text h1 {
+    font-size: 42px;
+  }
+
+  .hero-illustration {
+    width: 100%;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .description-header {
+    padding: 0 20px;
+  }
+
+  .description-logo {
+    font-size: 20px;
+  }
+
+  .back-chat-btn {
+    padding: 9px 13px;
+    font-size: 12px;
+  }
+
+  .description-container {
+    padding: 0 18px;
+  }
+
+  .hero-text h1 {
+    font-size: 34px;
+  }
+
+  .hero-text p {
+    font-size: 15px;
+  }
+
+  .hero-illustration {
+    height: 300px;
+  }
+
+  .illustration-circle {
+    width: 210px;
+    height: 210px;
+    font-size: 75px;
+  }
+
+  .floating-message {
+    padding: 10px 13px;
+  }
+
+  .message-one {
+    left: 0;
+  }
+
+  .message-two {
+    right: 0;
+  }
+
+  .features-grid,
+  .steps-container {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading h2 {
+    font-size: 26px;
+  }
+
+  .description-cta {
+    flex-direction: column;
+    text-align: center;
+    padding: 35px 25px;
+  }
+
+  .description-cta h2 {
+    font-size: 23px;
+  }
+
+  .description-footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+}

@@ -1,124 +1,168 @@
 import { useState, useEffect } from "react";
-
 import axios from "axios";
 import Header from "../components/header";
 import "./ChatPage.css";
 import { Link } from "react-router-dom";
 
-const ChatPage = () => {
 
+const ChatPage = () => {
     const [name, setName] = useState("");
     const [chats, setChats] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    
 
-  const fetchData = async () => {
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            setError(false);
 
-    try {
-        setLoading(true);
-        setError(false);
+            const token = localStorage.getItem("access_token");
 
-        // Get JWT token once
-        const token = localStorage.getItem("access_token");
-
-        console.log("TOKEN:", token);
-
-
-        // Get chat relations
-        const data = await axios.get(
-            "http://localhost:8000/chat/list",
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
+            const data = await axios.get(
+                "http://localhost:8000/chat/list",
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 }
-            }
-        );
+            );
 
-        console.log(
-            "Chat list coming from backend:",
-            data.data
-        );
+            setChats(data.data || []);
 
-        // Store chat list
-        const newData = data.data || [];
-
-        setChats(newData);
-
-
-        // Get logged-in user's information
-        const me = await axios.get(
-            "http://localhost:8000/user/me",
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
+            const me = await axios.get(
+                "http://localhost:8000/user/me",
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 }
-            }
-        );
+            );
 
-        // Set logged-in user's name
-        setName(me?.data?.name || "");
+            setName(me?.data?.name || "");
 
-    } catch (error) {
+        } catch (error) {
+            console.log(
+                "Error:",
+                error.response?.data || error.message
+            );
 
-        console.log("Catch called");
-
-        console.log(
-            "Error:",
-            error.response?.data || error.message
-        );
-
-        setError(true);
-
-    } finally {
-
-        setLoading(false);
-
-    }
-};
+            setError(true);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         fetchData();
-        console.log("use effect called");
     }, []);
 
+
+    // ==========================================
+    // DELETE COMPLETE CHAT
+    // ==========================================
+
+    const handleDeleteChat = async (e, chatId) => {
+        // Prevent opening the chat when Delete is clicked
+        e.preventDefault();
+        e.stopPropagation();
+
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this chat and all its messages?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem("access_token");
+
+            await axios.delete(
+                `http://localhost:8000/chat/${chatId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            // Remove deleted chat from the screen immediately
+            setChats((previousChats) =>
+                previousChats.filter(
+                    (chat) => chat.chat_id !== chatId
+                )
+            );
+
+        } catch (error) {
+            console.log(
+                "Delete chat error:",
+                error.response?.data || error.message
+            );
+
+            alert(
+                error.response?.data?.detail ||
+                "Could not delete chat"
+            );
+        }
+    };
+   
+
+
     return (
-    <div className="chat-fullpage">
+        <div className="chat-fullpage">
 
-        <Header userName={name} />
+            <Header userName={name} />
 
-        <div className="chat-list">
+            <div className="chat-list">
 
-            {loading && <p>Loading...</p>}
+                {loading && <p>Loading...</p>}
 
-            {error && <p>Something went wrong</p>}
+                {error && <p>Something went wrong</p>}
 
-            {chats.map((chat) => (
+                {!loading && !error && chats.length === 0 && (
+                    <p className="no-chats">
+                        No chats available
+                    </p>
+                )}
 
-                
-              <Link
-                className="link"
-                to={`/inbox/${chat.chat_id}/${chat.user_id}`}
-                key={chat.chat_id}
-                >
-                <div className="chat-item">
+                {chats.map((chat) => (
 
-                <div className="chat-user">
+                    <Link
+                        className="link"
+                        to={`/inbox/${chat.chat_id}/${chat.user_id}`}
+                        key={chat.chat_id}
+                    >
 
-                <h3>{chat.name}</h3>
+                        <div className="chat-item">
 
-                <p>{chat.user_id}</p>
+                            <div className="chat-user">
+                                <h3>{chat.name}</h3>
+                                <p>{chat.user_id}</p>
+                            </div>
 
-                </div>
 
-                </div>
-                </Link>
+                            {/* DELETE BUTTON */}
+                            <button
+                                className="delete-chat-btn"
+                                onClick={(e) =>
+                                    handleDeleteChat(e, chat.chat_id)
+                                }
+                                title="Delete chat"
+                            >
+                                🗑️
+                            </button>
 
-            ))}
+                        </div>
+
+                    </Link>
+
+                ))}
+
+            </div>
 
         </div>
-
-    </div>
-);
-}
+    );
+};
 
 export default ChatPage;
