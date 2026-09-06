@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "../components/header";
-import "./ChatPage.css";
+import "./chatpage.css";
 import { Link } from "react-router-dom";
 
 

@@ -12,7 +12,7 @@ db = client["xchat"]
 
 users_collection = db["users"]
 chats_collection = db["chats"]
-messages_collection = db["mesaages"]
+messages_collection = db["messages"]
 
 users_collection.create_index(
     "user_id",
