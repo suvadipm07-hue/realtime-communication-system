@@ -15,7 +15,7 @@ function RegisterPage() {
 
     try {
       const response = await axios.post(
-        "hhttps://realtime-communication-system.onrender.com/register",
+        "https://realtime-communication-system.onrender.com/register",
         {
           user_id: userId,
           password: password,
