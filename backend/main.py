@@ -32,9 +32,9 @@ app.include_router(chat_actions_router)
 
 app.add_middleware(
     CORSMiddleware,
-   allow_origins = [
-    "https://YOUR-FRONTEND.onrender.com",
-    "http://localhost:5173"
+   allow_origins=[
+        "http://localhost:5173",  # your local dev
+        "https://realtime-communication-system-1.onrender.com",  # deployed frontend
     ],
     allow_credentials=True,
     allow_methods=["*"],
