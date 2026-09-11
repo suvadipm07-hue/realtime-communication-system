@@ -14,7 +14,7 @@ const LoginPage=()=> {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/login",
+        "https://realtime-communication-system.onrender.com/login",
         {
           user_id: userId,
           password: password
@@ -54,7 +54,7 @@ const LoginPage=()=> {
       <div className="login-box">
 
         <div className="logo">
-          x<span>chat</span>
+          You<span>Chat</span>
         </div>
 
         <h1>Welcome Back</h1>

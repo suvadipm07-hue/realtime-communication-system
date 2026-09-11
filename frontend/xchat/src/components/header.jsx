@@ -33,7 +33,7 @@ const Header = ({ userName }) => {
         try {
 
             const response = await axios.get(
-                `http://127.0.0.1:8000/users/search/${searchId}`
+                `https://realtime-communication-system.onrender.com/users/search/${searchId}`
             );
 
             console.log("User found:", response.data);
@@ -76,7 +76,7 @@ const Header = ({ userName }) => {
             const token = localStorage.getItem("access_token");
 
             const response = await axios.post(
-                "http://127.0.0.1:8000/chat/create",
+                "https://realtime-communication-system/register.onrender.com/chat/create",
 
                 {
                     other_user_id: searchResult.user_id

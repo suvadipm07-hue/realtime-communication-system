@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import "./InboxPage.css";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://realtime-communication-system.onrender.com";
 
 function InboxPage() {
   const { chatId, userId } = useParams();
@@ -109,7 +109,7 @@ function InboxPage() {
     }
 
     const socket = new WebSocket(
-      `ws://127.0.0.1:8000/ws/messages/${chatId}`
+  `wss://realtime-communication-system.onrender.com/ws/messages/${chatId}`
     );
 
     socketRef.current = socket;

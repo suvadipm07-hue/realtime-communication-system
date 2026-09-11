@@ -20,7 +20,7 @@ const ChatPage = () => {
             const token = localStorage.getItem("access_token");
 
             const data = await axios.get(
-                "http://localhost:8000/chat/list",
+                "https://realtime-communication-system.onrender.com/chat/list",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -31,7 +31,7 @@ const ChatPage = () => {
             setChats(data.data || []);
 
             const me = await axios.get(
-                "http://localhost:8000/user/me",
+                "https://realtime-communication-system.onrender.com/user/me",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -79,7 +79,7 @@ const ChatPage = () => {
             const token = localStorage.getItem("access_token");
 
             await axios.delete(
-                `http://localhost:8000/chat/${chatId}`,
+                `https://realtime-communication-system.onrender.com/chat/${chatId}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
