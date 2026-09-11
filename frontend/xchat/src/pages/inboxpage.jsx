@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import "./InboxPage.css";
+import "./inboxpage.css";
 
 const API_URL = "https://realtime-communication-system.onrender.com";
 
