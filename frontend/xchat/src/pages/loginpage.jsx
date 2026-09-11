@@ -60,7 +60,7 @@ const LoginPage=()=> {
         <h1>Welcome Back</h1>
 
         <p className="subtitle">
-          Login to continue to xchat
+          Login to continue to YouChat
         </p>
 
         <form onSubmit={handleLogin}>

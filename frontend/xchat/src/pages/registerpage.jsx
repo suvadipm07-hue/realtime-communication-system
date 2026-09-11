@@ -47,7 +47,7 @@ function RegisterPage() {
         </div>
 
         <p className="subtitle">
-          Register to continue to xchat
+          Register to continue to YouChat
         </p>
 
         <form onSubmit={handleRegister}>
