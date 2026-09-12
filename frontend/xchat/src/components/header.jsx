@@ -76,7 +76,7 @@ const Header = ({ userName }) => {
             const token = localStorage.getItem("access_token");
 
             const response = await axios.post(
-                "https://realtime-communication-system/register.onrender.com/chat/create",
+                "https://realtime-communication-system.onrender.com/chat/create",
 
                 {
                     other_user_id: searchResult.user_id

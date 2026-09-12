@@ -1,74 +1,140 @@
 .register-page {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #f4f6fb;
+min-height: 100vh;
+min-height: 100dvh;
+display: flex;
+justify-content: center;
+align-items: center;
+background: #f4f6fb;
+padding: 20px;
+box-sizing: border-box;
 }
 
 .register-box {
-  width: 400px;
-  padding: 40px;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+width: 100%;
+max-width: 400px;
+padding: 40px;
+box-sizing: border-box;
+background: white;
+border-radius: 15px;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
-  text-align: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #2563eb;
-  margin-bottom: 25px;
+text-align: center;
+font-size: 36px;
+font-weight: bold;
+color: #2563eb;
+margin-bottom: 25px;
 }
 
 .logo span {
-  color: #111827;
+color: #111827;
 }
 
 .register-box h1 {
-  text-align: center;
-  color: #111827;
-  margin-bottom: 8px;
+text-align: center;
+color: #111827;
+margin-bottom: 8px;
 }
 
 .subtitle {
-  text-align: center;
-  color: #6b7280;
-  margin-bottom: 30px;
+text-align: center;
+color: #6b7280;
+margin-bottom: 30px;
+line-height: 1.5;
 }
 
 .register-box form {
-  display: flex;
-  flex-direction: column;
+display: flex;
+flex-direction: column;
 }
 
 .register-box label {
-  margin-bottom: 7px;
-  font-weight: bold;
-  color: #374151;
+margin-bottom: 7px;
+font-weight: bold;
+color: #374151;
 }
 
 .register-box input {
-  padding: 13px;
-  margin-bottom: 20px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 15px;
+width: 100%;
+padding: 13px;
+margin-bottom: 20px;
+box-sizing: border-box;
+border: 1px solid #d1d5db;
+border-radius: 8px;
+font-size: 15px;
+outline: none;
+}
+
+.register-box input:focus {
+border-color: #2563eb;
 }
 
 .register-box button {
-  padding: 13px;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
+width: 100%;
+padding: 13px;
+border: none;
+border-radius: 8px;
+background: #2563eb;
+color: white;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
 }
 
 .register-box button:hover {
-  background: #1d4ed8;
+background: #1d4ed8;
 }
 
+/* Mobile */
+@media (max-width: 480px) {
+.register-page {
+padding: 15px;
+align-items: center;
+}
+
+.register-box {
+max-width: 100%;
+padding: 28px 22px;
+border-radius: 12px;
+}
+
+.logo {
+font-size: 32px;
+margin-bottom: 20px;
+}
+
+.subtitle {
+font-size: 14px;
+margin-bottom: 25px;
+}
+
+.register-box label {
+font-size: 14px;
+}
+
+.register-box input {
+padding: 12px;
+font-size: 16px;
+}
+
+.register-box button {
+padding: 13px;
+font-size: 16px;
+}
+}
+
+/* Very small phones */
+@media (max-width: 350px) {
+.register-page {
+padding: 10px;
+}
+
+.register-box {
+padding: 24px 18px;
+}
+
+.logo {
+font-size: 29px;
+}
+}
