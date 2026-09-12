@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Header = ({ userName }) => {
+const Header = ({ userName, onChatAdded }) => {
 
     const [searchId, setSearchId] = useState("");
     const [searchResult, setSearchResult] = useState(null);
@@ -90,6 +90,10 @@ const Header = ({ userName }) => {
             );
 
             console.log("Chat created:", response.data);
+            
+            if (onChatAdded) {
+                    await onChatAdded();
+                }
 
             // Show success message
             setAddChatMessage("Chat added successfully");

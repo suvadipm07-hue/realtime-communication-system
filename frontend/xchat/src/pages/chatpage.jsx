@@ -112,7 +112,7 @@ const ChatPage = () => {
     return (
         <div className="chat-fullpage">
 
-            <Header userName={name} />
+           <Header userName={name} onChatAdded={fetchData} />
 
             <div className="chat-list">
 
