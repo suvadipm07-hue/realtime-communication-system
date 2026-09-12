@@ -33,7 +33,7 @@ const Header = ({ userName }) => {
         try {
 
             const response = await axios.get(
-                `https://realtime-communication-system.onrender.com/users/search/${searchId}`
+                `https://realtime-communication-system.onrender.com/chat/create/${searchId}`
             );
 
             console.log("User found:", response.data);
